@@ -1,0 +1,41 @@
+/////////////heap memory area////////////////
+
+--> at the time of jvm start up heap memory area will be get created.
+--> heap memory area are sharable and global. and this area can be shared among multiple threads.
+--. instacne variable declared inside class outside method,objects arrays which is an object these all are stored in heap area at run time.
+--> static varaible and static method are shareable resource of classes can be shared to any thread it will be present in static area .
+--> heap an dits object inside it will be managed by garabage collector and object will be remain in heap if there is refence pointing to it.
+--> instance variable of clas exist till there parent or refrenc exist.
+---> static variable can stay as apllication stay or its lifetime.multiple thread can access static variable and modify the data in
+heap.
+
+//////////////stack memory area///////////
+--> for every thread jvm create runtime stack .and the stack memory area is associated with indivisual thread one to one.
+---> all aprametre and & local vriables of method stored in stack memory area.
+--> every thread will have stack frame when calling method for instance.
+--> if the main thread which is running on seprate stack of main thread and it is having child thread which will be run its own
+seprate stack memory area for child thread. for every completion of method that thread stack have method stck frame that will get removed.
+and come back to caller stack frame.
+
+////////////////////////////////
+
+That is the problem happening when multiple threaad try to access shared resource without acting syncronisation then it will give unexpected result.
+to handle this type of suitation we have contol using code.
+
+---> thread always uses race and follow whenever whoever reaches first will be perform first and leads to data incosistency.and this condiftion is called
+race condiftion.
+--> race condition arises only when we are performing on non atomic
+-->atomic operation that is executes in 1 step & non atomic operations executes in multiples steps.atomic operation cannot be intrupted and they are thread safe.bcz i is stackignle step and there
+will be no way that other thread can observe intermediate state.
+--> in java each read write opeartion are atomic all variable whose size are <=32 bits,for long and double are not atomic because they uses 64 bits size.
+ex : int x=50, it is atomic ,
+if there are more than one steps like add some value or any other thing then other thread act on it.
+
+---. when more than one thread opearate on same object  without proper synchronization happen and those threads interleaves on each other
+because of atomic in nature then race condition arise.and then data consistency happen.
+
+--> data race--> when 2 or more threads in single process accessing same mmery location at same time and one of them trying to write
+or update to same memory location ,this process is called data race.
+
+---> we can use voltile type variable to make atomic varilable
+-->java provided atomic variable object that provides the thread safe lock free variable to do programming on single variables.
