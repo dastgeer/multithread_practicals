@@ -34,8 +34,8 @@ if there are more than one steps like add some value or any other thing then oth
 ---. when more than one thread opearate on same object  without proper synchronization happen and those threads interleaves on each other
 because of atomic in nature then race condition arise.and then data consistency happen.
 
---> data race--> when 2 or more threads in single process accessing same mmery location at same time and one of them trying to write
-or update to same memory location ,this process is called data race.
+--> data race--> when 2 or more threads in single process accessing same mmery location at same time and one of them
+trying to write or update to same memory location ,this process is called data race.
 
 ---> we can use voltile type variable to make atomic varilable
 -->java provided atomic variable object that provides the thread safe lock free variable to do programming on single variables.
@@ -43,3 +43,49 @@ or update to same memory location ,this process is called data race.
 --> other ways is use implicit lock or synchronization.
 --> other way is use explicit lock using concurrent package locks reenterrant locks.
 -->other more ways is semophore,countdownlatch,cyclic barrier,exchanger etc..
+
+//////////////////////////critical section///////////////////
+---> piece of code that access/work/execute  on shared resources/non synchronized resource. so, that there will be high chances of data incosistency/ race condition
+happened while dealing with  multithreading env.
+--> this problem can be solved by multiple ways.
+1)  we have follow approach the one 1 thread can start woring on it and other thread would in waiting state to acquire lock on it .
+it can use with synchronization and by synchronization progrmmaer can achive mutual exclusion between process or get rid of data incsonsitency
+by wrapping critical section around synchronization.
+-->using synchronized keyword we can do but by what and how we have to use this keyword?
+1) synchrinized blocak and synchronized method. we can not apply with variable and classes. this have disadvantage speed get slow.
+2) every object has 2 area , synchronized area & non-synchronized area,non synchronized area will be accessable with multiple thread
+and synchronized area will be accessble by one thread at atime.
+3) when any method of instance have synchorized and acquired lock that is called object level locking , its only synchronized method is alowed to access
+by one thread others will be wait.
+but if any thread try to execute static synchronized method then it will be not allowed to other thread to execute the any other static synchronized method of class
+but if there is static methods are not synchronized can be accessible by other thread can also be accesible normal instace method and synchronized instance method as well.
+this all operation can be said as class level lock.
+
+/////////////synchronized block////////////////////////
+-> if our method have 100 or 500 line of code but critical section piece of code only have shared resource or can produce incosistent data
+while working in multithreading env.
+we have to wrap only specific peiece of code to just to ensure the mutual exclusion or data inconsitency.
+1) 2 ways also snchronised block a) object/instance level b) class level
+--->synchronised(this):-> object /instance level
+this block of code will execute only when it acquire lock of curent object,and only current thread will have access for this block when we put this.
+this means current object and it is tied with current thread and it will be put lock on current object by current thread.
+-->synchronized(classname.class):-> class level lock
+this block will only allsowed to take name of class if give this it will give error,and this class level locking will be applied only in static method.
+
+////inter thread communcation//////////////inter means beteen
+--> we using wait() to focfully wait the current thread until some other thread call notify() or notifyall() on same object/instance.
+-->notify() & notifyall() used to waking up threads who all are waiting for same object or instance.
+ex for inter hread communciation: producer consumer ,when producer thread produce some data in to bucket then it has to notify the
+consumer that please consume and procuer will in wait state,and  once consumer consumed
+then consumer has to notify to producer then consumer has to be in wait() state
+--> we have to apply wait() & notify() on objects not specific with thread like join and other method of thread,here one thread will switch to other thread task working on same object.
+wait & notify is in object class.lock acquire and release from object only. and these must be called from synchronized area. other wise throw run time exception eg:
+You can't call notify on an object whose monitor you don't own:
+ synchronized (obj1) {
+                  System.out.println(i + Thread.currentThread().getName());
+                  try {
+                      obj2.notify();  // You haven't synchronized on obj2
+                      we must to use synchronzed blcok or method when dealing with 2 or more thread and we cannot call invoke on refrect of object that
+                      whose object is not own for object monitoring.//so it is matter of acqyiure montionring and hold lock on object
+if there will be more than one producer and more than one consumer then we will use notifyAll() because it has to be notify all of the thread of that object want
+to acquire lock. it doesnt matter which thread get notified first these all depends on jvm.
