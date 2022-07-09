@@ -169,3 +169,33 @@ and same process will perform continously until while task been completed.that w
 
 cyclic barrier.await() is called to threads to wait for all other thread to compltete tasks and come back.await() is blocking method.
 but await() can be timedout /interupped by other thread.
+
+
+//////////////////////blocking queue/////////////
+---> it is one of collection type that not only store elements but also support flow by blocking the controls either blocking queue is full or blocking
+queue is empty.
+take() of blocking queue will be block if queue is empty
+put() of blocking queue will be block if queue is full
+ArrayBlockingqueue, linkedblocking queue,priority blcking queue is implemnetation clasees for blocking queue. linked blocking quue is good as it have
+high throughput and beeter perfomance
+
+
+///////////////////excahnger//////////////////////
+---> exchanger class the represent the meeting point for 2 threads where they can exchange the object. this is like synchronous queue.
+synchronus queue is blocking queue that will have  size one.that will hold only single element. producer send single element and consumer
+recieve single lement only at a time.
+but excahnager is almost like synchronos queue but not it is.because excahnge will share the object between 2 thread.
+exchanges happens in both direction like thread 1 get thread 2 object and thread 2 object get thread 1 object.
+exchanges will do both producer and consumer opeartions.
+single thread wont able to do exchange will wait for another thread to start exchnager operation. till that time first come thread will be bloked
+until some other thread come to exchange.
+
+/////////////////sempahore///////////////
+---> semaphore injava maintains specified no of permits  in order to access shared resource.
+--->current thread must require permit to access shared resource.
+--->semaphore must be initalized with no fo permits to access shared resource with initalized count.
+--> if thread requst for permit if available then granted if not thread will be blocked and wait for permit to be available agian due to
+release from different htread.
+-->semaphore class is initialized with ocunting semaphore with no of permits. semaphore have 2 main method acquire() & release(). for get and
+release permit.
+--> semaphore with one counting intialized value called binary semaphore.
