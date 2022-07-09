@@ -89,3 +89,83 @@ You can't call notify on an object whose monitor you don't own:
                       whose object is not own for object monitoring.//so it is matter of acqyiure montionring and hold lock on object
 if there will be more than one producer and more than one consumer then we will use notifyAll() because it has to be notify all of the thread of that object want
 to acquire lock. it doesnt matter which thread get notified first these all depends on jvm.
+
+///////////////////////////thread explicit lock///////////////////
+--> it is similar to thread synchronizarion mechanism  similar to synchronized blocks.
+--> this new locking mechanism has more flexibility than the synchronised block.
+--> there is fairness() in lock used to provide the lock. there is lock() & unlock() to lock on object and unlock on object
+there is 2  implemnetstion classes for lock.
+Reentrant lock & reentrant readwritelock.
+reentractreadwritelock has 2 inner implementation i.e called readlock & writelock
+trylock() it will check ,is lock available then acquire if not then it will process with the further execution without waiting for lock.
+if thread is clling unlock() then thread must have called lock() in the thred,otherwise it will get illegal monitor state exception.
+
+---> in case of reentrantlock , a single thread will get/acquire lock multiple times without any issue.when the thread call multiple time lock()
+then it will increase the lock counter that many time and and it will decrease lock state by calling unlock() till count value =0;
+--> fairness policy: if we pass fair is true is constructor then it will enable flexibilty that the longest waiting thread will get chance
+to acquire lock if available by deafult is false then it will.
+--> we can use with object level as well as class level ,just using class level create instance of rentrentant with static keyword.
+no different with class level & instance level just static keyword before objet refrect side.
+--> thread safety means more than one thread must work in cordination on shared resource or object so it should not overide the changes done by each other.
+
+
+//////////////////deadlock,liveness,starvation////////////////
+---> deadlock is the suitation that arises due to improperly way of using synchronization.
+and the root cause of that when 2 or more threads waiting for each other to release the resource or lock but both are struck
+for infintime amout of time this suitation is called deadlock .
+deadlock also occur when multiple process try to acess same resource at same time .
+when 1 thread already have acquired the lock already and trying to acquire another lock before releaseing of first one .
+
+--->starvation is that suitation where thread is unable to get the regular access of shared resource and this way unable to make progress
+and this is happened due to unable to made unavailable for long period of shared resource by greedy resources.
+starvation suitation happen when any other thread is also waiting for shared resource that has been in deadlock state by thread1 & thread2
+
+---> livelock is the sutation when 2 or more process are continously repeat same interaction or opration in response to change the other process
+without doing any useful work. these wis not deadlock state but both are keeping bsy to interating with each other.but kind of deadlock scenario.
+
+//////////////////////// executor framework//////////////
+--->executor famework is used for thread pooling. exutore interface is parent and have child interface executoeservice and have child implementation called
+threadpoolexecutor.
+--->thread pool is collection of threads and it will helpful in solving resource thrashing and threadlifecycle overhead(it will not allow to wait when task require thread to exesute and runtime it will create that time is called overhead)
+so pool will created with spcified no of thread it will finish the task and come back to specific tagged pool .
+--->eg: library and reader , reader get book from library read it and return so available for other reader.
+--> pooling mechanism makes object shareable and save memory as well. we have to create the pool execute the task using those thread of pool and when not use terminate the pool
+using shutdown().
+--> if any task has to be done then we have to use the executorservice interface  that will create and execute the service.it means it will create threadpool ,pass the
+task as service to exeute it will finish and shutdown the pool.
+---> executorservice internally call the thread pool to assign the task and manage resource accordingly and optimally.
+---> callable have call method and have rturn type along with execption throw because it will have return type and it will rturn object as well as
+but runnable doesnt have return type so it will have checked exception .
+
+/////////////////////thread local/////////////////
+--->threadlocal is a class that will allow us to have variable that will be unique to given thrad .in other word if same code will run in different thread
+then these execution will not share the value to other thrad.
+eac thread will have its own variable and its value that will be local to that tread.
+---> thread local will maintain the consistency in  shared highly scoped variables.
+--> thread local which is varaible will be create new object of thrad local for each of called thread or running thread..
+
+/////////////////countdown latch/////////////////////
+---> it is also one kind of synchroniser in which one thread running other threads have to wait before start processing.
+we can also ahchive inter thread comunication using countdownlatch.
+
+--->coutdownlatch is shared among the number of threads which is equal to initial valueand and each thread will decrement the latch counter as
+soon as compltes its job. and when counter reaches to zero main thread or master thread gets notified.and start executing further.
+current thread will be blocked until count down latch come down to 0 other wise thread will in dormant state.
+
+latch.await() it will wait all other thread completes its execution and make countdown to 0 till the time main thread will be locked/paused/suspended.
+each thread will call latch.countDown() once job has comleted by each thread and each one will do countdown().
+---> disadvantage is with countdown latch that it is not reusable once ccountdown to 0 then we cannot reuse countdown any more ,to over come this
+problem we have to use cyclic barrier.
+
+
+////////////////////////cyclic barrier/////////////////////////
+---> cyclic barrier is used to make thread wait for each other. it is like synchrozes as semaphore,blocking queue, concurrenthasmap.
+--> the main aim of mutithreading is the break down the big task and assigned each indivisual small task to each thread and allow to
+execute the task speratly onec all thread complted their task then return back the result to master thread  and master get the rsult
+club thenm and marked as task has been completed.
+cyclic barrier the master here.each of thread compted there task and come back to cyclicbarrier.await() to inform master then every thread comes
+back and master task start job and mark the job completed. this master might the child of anther master and complted and go to there another master task
+and same process will perform continously until while task been completed.that why cyclic barier can be resuable.
+
+cyclic barrier.await() is called to threads to wait for all other thread to compltete tasks and come back.await() is blocking method.
+but await() can be timedout /interupped by other thread.
